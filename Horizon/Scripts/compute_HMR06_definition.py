@@ -32,7 +32,7 @@ def EGMF(is_EGMF):
 # ----------------------------------------------------------------------------------------------------
 def compute_HMR06_definition_matrix(Zs, is_EGMF):
 
-    data = np.loadtxt('../Runs/Files/intensity_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)))
+    data = np.loadtxt('../results/intensity_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)))
 
     matrix = np.zeros((len(cts), 79))
 
@@ -43,14 +43,14 @@ def compute_HMR06_definition_matrix(Zs, is_EGMF):
     matrix[0, matrix[0,:] == 0] = sys.float_info.min
     matrix = matrix / matrix[0,:]
     
-    np.savetxt('../Runs/Files/HMR06_definition_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)), matrix, fmt = '%e', header = 'gmm = {0} | Rmax = 10^{{{1}}} V | Zs = {2}'.format(gmm, np.log10(Rmax), Zs), delimiter = '\t')
+    np.savetxt('../results/HMR06_definition_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)), matrix, fmt = '%e', header = 'gmm = {0} | Rmax = 10^{{{1}}} V | Zs = {2}'.format(gmm, np.log10(Rmax), Zs), delimiter = '\t')
 
 # ----------------------------------------------------------------------------------------------------
 def compute_HMR06_definition_cut(Zs, is_EGMF, fraction):
 
-    data = np.loadtxt('../Runs/Files/HMR06_definition_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)))
+    data = np.loadtxt('../results/HMR06_definition_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)))
 
-    f = open('../Runs/Files/HMR06_definition_cut_{0}_{1}_{2:02d}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF), int(fraction * 100)), 'w')
+    f = open('../results/HMR06_definition_cut_{0}_{1}_{2:02d}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF), int(fraction * 100)), 'w')
 
     for iE in range(79):
         for icts in range(len(cts)):

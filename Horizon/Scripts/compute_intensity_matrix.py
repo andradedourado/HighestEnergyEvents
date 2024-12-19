@@ -58,7 +58,7 @@ def compute_intensity_matrix(gmm, Rmax, Zs, is_EGMF):
 
     # elif is_EGMF == True:
 
-    np.savetxt('../Runs/Files/intensity_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)), matrix, fmt = '%e', header = 'gmm = {0} | Rmax = 10^{{{1}}} V | Zs = {2}'.format(gmm, np.log10(Rmax), Zs), delimiter = '\t')
+    np.savetxt('../results/intensity_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)), matrix, fmt = '%e', header = 'gmm = {0} | Rmax = 10^{{{1}}} V | Zs = {2}'.format(gmm, np.log10(Rmax), Zs), delimiter = '\t')
 
 # ----------------------------------------------------------------------------------------------------
 if __name__ == '__main__':

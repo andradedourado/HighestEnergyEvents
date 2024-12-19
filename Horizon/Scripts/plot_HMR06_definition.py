@@ -46,7 +46,7 @@ def plot_HMR06_definiton_matrix(Zs, is_EGMF):
     cts = np.logspace(0, 3.5, num = 71)
     E = np.logspace(4./(2.*79), 4. - 4./(2.*79), num = 79) 
 
-    data = np.loadtxt('../Runs/Files/HMR06_definition_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)))
+    data = np.loadtxt('../results/HMR06_definition_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)))
 
     im = plt.pcolor(np.log10(E * 1.e18), cts, data, cmap = 'cubehelix_r')  
     plt.colorbar(im, label = r'Fraction $F$')
@@ -59,15 +59,15 @@ def plot_HMR06_definiton_matrix(Zs, is_EGMF):
     plt.xlim([np.log10(40 * 1.e18), np.log10(240 * 1.e18)])
     plt.xlabel(r'$\log_{10}({\rm Energy/eV})$')
     plt.ylabel(r'$\text{Propagation distance}{\rm \: [Mpc]}$')
-    plt.savefig('../Runs/Plots/HMR06_definiton_matrix_{0}.pdf'.format(particles[iZs(Zs)]), format = 'pdf', bbox_inches = 'tight')
-    plt.savefig('../Runs/Plots/HMR06_definiton_matrix_{0}.png'.format(particles[iZs(Zs)]), format = 'png', bbox_inches = 'tight', dpi = 300)
+    plt.savefig('../figures/HMR06_definiton_matrix_{0}.pdf'.format(particles[iZs(Zs)]), format = 'pdf', bbox_inches = 'tight')
+    plt.savefig('../figures/HMR06_definiton_matrix_{0}.png'.format(particles[iZs(Zs)]), format = 'png', bbox_inches = 'tight', dpi = 300)
     plt.show()
 
 # ----------------------------------------------------------------------------------------------------
 def plot_HMR06_definition_cut_Zs():
 
     for Zs in Zss:
-        data = np.loadtxt('../Runs/Files/HMR06_definition_cut_{0}_NoEGMF_10.dat'.format(particles[iZs(Zs)]))  
+        data = np.loadtxt('../figures/HMR06_definition_cut_{0}_NoEGMF_10.dat'.format(particles[iZs(Zs)]))  
         plt.plot(np.log10(data[:,0] * 1.e18), data[:,1], label = '{}'.format(particles_legend[iZs(Zs)]))
     
     at = AnchoredText(r'No EGMF | $F = 0.1$', loc = 'upper right', frameon = False, prop = {'fontsize': 'large'})
@@ -78,16 +78,16 @@ def plot_HMR06_definition_cut_Zs():
     plt.xlabel(r'$\log_{10}({\rm Energy/eV})$')
     plt.ylabel(r'Horizon$\: \rm [Mpc]$')
     plt.legend()
-    plt.savefig('../Runs/Plots/HMR06_definition_cut_Zs.pdf', bbox_inches = 'tight')
-    plt.savefig('../Runs/Plots/HMR06_definition_cut_Zs.png', bbox_inches = 'tight', dpi = 300)
+    plt.savefig('../figures/HMR06_definition_cut_Zs.pdf', bbox_inches = 'tight')
+    plt.savefig('../figures/HMR06_definition_cut_Zs.png', bbox_inches = 'tight', dpi = 300)
     plt.show()
 
 # ----------------------------------------------------------------------------------------------------
 def plot_HMR06_definition_cut_fraction():
 
     for fraction in fractions:
-        data_14N = np.loadtxt('../Runs/Files/HMR06_definition_cut_14N_NoEGMF_{0:02d}.dat'.format(int(fraction * 100)))  
-        data_56Fe = np.loadtxt('../Runs/Files/HMR06_definition_cut_56Fe_NoEGMF_{0:02d}.dat'.format(int(fraction * 100)))  
+        data_14N = np.loadtxt('../results/HMR06_definition_cut_14N_NoEGMF_{0:02d}.dat'.format(int(fraction * 100)))  
+        data_56Fe = np.loadtxt('../results/HMR06_definition_cut_56Fe_NoEGMF_{0:02d}.dat'.format(int(fraction * 100)))  
         plt.plot(np.log10(data_14N[:,0] * 1.e18), data_14N[:,1], ls = get_ls(fraction), color = cm.tab10(np.linspace(0, 1, 10)[2]))
         plt.plot(np.log10(data_56Fe[:,0] * 1.e18), data_56Fe[:,1], ls = get_ls(fraction), color = cm.tab10(np.linspace(0, 1, 10)[4]))
     
@@ -108,8 +108,8 @@ def plot_HMR06_definition_cut_fraction():
     plt.xlim([np.log10(40 * 1.e18), np.log10(240 * 1.e18)])
     plt.xlabel(r'$\log_{10}({\rm Energy/eV})$')
     plt.ylabel(r'Horizon$\: \rm [Mpc]$')
-    plt.savefig('../Runs/Plots/HMR06_definition_cut_fraction.pdf', bbox_inches = 'tight')
-    plt.savefig('../Runs/Plots/HMR06_definition_cut_fraction.png', bbox_inches = 'tight', dpi = 300)
+    plt.savefig('../figures/HMR06_definition_cut_fraction.pdf', bbox_inches = 'tight')
+    plt.savefig('../figures/HMR06_definition_cut_fraction.png', bbox_inches = 'tight', dpi = 300)
     plt.show()
 
 # ----------------------------------------------------------------------------------------------------
