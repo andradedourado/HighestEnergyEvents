@@ -67,7 +67,7 @@ def plot_HMR06_definiton_matrix(Zs, is_EGMF):
 def plot_HMR06_definition_cut_Zs():
 
     for Zs in Zss:
-        data = np.loadtxt('../figures/HMR06_definition_cut_{0}_NoEGMF_10.dat'.format(particles[iZs(Zs)]))  
+        data = np.loadtxt('../results/HMR06_definition_cut_{0}_NoEGMF_10.dat'.format(particles[iZs(Zs)]))  
         plt.plot(np.log10(data[:,0] * 1.e18), data[:,1], label = '{}'.format(particles_legend[iZs(Zs)]))
     
     at = AnchoredText(r'No EGMF | $F = 0.1$', loc = 'upper right', frameon = False, prop = {'fontsize': 'large'})
