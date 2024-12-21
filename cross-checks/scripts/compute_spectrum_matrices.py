@@ -43,7 +43,7 @@ def gmm_filename_suffix(gmm):
         return 'thin'
 
 # ----------------------------------------------------------------------------------------------------
-def compute_intensity_matrix(gmm, Zs):
+def compute_earth_spectrum_matrix(gmm, Zs):
 
     matrix = np.zeros((len(cts), 79))
 
@@ -56,7 +56,22 @@ def compute_intensity_matrix(gmm, Zs):
             for idata in range(len(data)):
                 matrix[icts, idata] += data[idata] * w_spec(Es[iEs], Zs, gmm) * w_sim(Es[iEs], cts[icts])
 
-    np.savetxt('../results/intensity_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], gmm_filename_suffix(gmm)), matrix, fmt = '%e', header = 'gmm = {0} | Rmax = \infty V | Zs = {1}'.format(gmm, Zs), delimiter = '\t')
+    np.savetxt('../results/earth_spectrum_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], gmm_filename_suffix(gmm)), matrix, fmt = '%e', header = 'gmm = {0} | Rmax = \infty V | Zs = {1}'.format(gmm, Zs), delimiter = '\t')
+
+# ----------------------------------------------------------------------------------------------------
+def compute_source_spectrum_matrix(gmm, Zs):
+
+    num_particles = 1000
+
+    matrix = np.zeros((len(cts), 79))
+
+    for icts in range(len(cts)):
+
+        for iEs in range(len(Es)-1):
+            
+            matrix[icts, iEs] += num_particles * w_spec(Es[iEs], Zs, gmm) * w_sim(Es[iEs], cts[icts])
+
+    np.savetxt('../results/source_spectrum_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], gmm_filename_suffix(gmm)), matrix, fmt = '%e', header = 'gmm = {0} | Rmax = \infty V | Zs = {1}'.format(gmm, Zs), delimiter = '\t')
 
 # ----------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -64,6 +79,7 @@ if __name__ == '__main__':
     for gmm in gmms: 
         for Zs in Zss:
             if Zs not in [2, 7]:
-                compute_intensity_matrix(gmm, Zs)
+                compute_earth_spectrum_matrix(gmm, Zs)
+                compute_source_spectrum_matrix(gmm, Zs)
 
 # ----------------------------------------------------------------------------------------------------

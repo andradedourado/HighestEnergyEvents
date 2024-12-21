@@ -66,17 +66,42 @@ def plot_HMR06_original_1H():
 
     plt.xlabel(r'Energy$\: \rm [EeV]$')
     plt.ylabel(r'Distance$\: \rm [Mpc]$')
-    plt.legend(title = r'Fraction $F$', bbox_to_anchor = (1., 0.762))
+    plt.legend(title = r'Fraction $F$', bbox_to_anchor = (1., 0.763))
     plt.savefig('../figures/HMR06_original_1H.pdf', bbox_inches = 'tight')
     plt.savefig('../figures/HMR06_original_1H.png', bbox_inches = 'tight', dpi = 300)
     plt.show()
 
 # ----------------------------------------------------------------------------------------------------
-# def plot_HMR06_comparison_1H():
+def plot_HMR06_comparison_1H(gmm):
+
+    for fraction in fractions:
+        data_HMR06 = np.loadtxt('../data/HMR06_original_1H_{0}_{1}.dat'.format(gmm_filename_suffix(gmm), int(fraction * 100)))
+        data_LAD = np.loadtxt('../results/HMR06_definition_cut_1H_{0}_{1}.dat'.format(gmm_filename_suffix(gmm), int(fraction * 100))) 
+        plt.plot(data_HMR06[:,0], data_HMR06[:,1], color = get_color(fraction), ls = '-', label = r'${0}$'.format(fraction))
+        plt.plot(data_LAD[:,0], data_LAD[:,1], color = get_color(fraction), ls = '--')
+
+    at = AnchoredText(r'HMR06 | {0} | $\Gamma = {1}$'.format(particles_legend[0], gmm), loc = 'upper center', frameon = False, prop = {'fontsize': 'large'})
+    plt.gca().add_artist(at)
+
+    HMR06 = lines.Line2D([], [], color = 'k', ls = '-', label = r'HMR06')
+    LAD = lines.Line2D([], [], color = 'k', ls = '--', label = r'LAD')
+    lgnd_01 = plt.legend(title = r'Results', handles = [HMR06, LAD], frameon = True, loc = 'upper right')
+    plt.gca().add_artist(lgnd_01)
+
+    plt.xlim([50, 150])
+    plt.ylim([0, 200])
+    plt.xlabel(r'Energy$\: \rm [EeV]$')
+    plt.ylabel(r'Distance$\: \rm [Mpc]$')
+    plt.legend(title = r'Fraction $F$', bbox_to_anchor = (1., 0.763))
+    plt.savefig('../figures/HMR06_comparison_1H_{0}.pdf'.format(gmm_filename_suffix(gmm)), bbox_inches = 'tight')
+    plt.savefig('../figures/HMR06_comparison_1H_{0}.png'.format(gmm_filename_suffix(gmm)), bbox_inches = 'tight', dpi = 300)
+    plt.show()
 
 # ----------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    plot_HMR06_original_1H()
+    # plot_HMR06_original_1H()
+    for gmm in gmms:
+        plot_HMR06_comparison_1H(gmm)
 
 # ----------------------------------------------------------------------------------------------------

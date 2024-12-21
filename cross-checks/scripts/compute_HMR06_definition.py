@@ -31,7 +31,8 @@ def gmm_filename_suffix(gmm):
 # ----------------------------------------------------------------------------------------------------
 def compute_HMR06_definition_matrix(gmm, Zs):
 
-    data = np.loadtxt('../results/intensity_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], gmm_filename_suffix(gmm)))
+    data = np.loadtxt('../results/earth_spectrum_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], gmm_filename_suffix(gmm)))
+    data = data / np.loadtxt('../results/source_spectrum_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], gmm_filename_suffix(gmm)))
 
     matrix = np.zeros((len(cts), 79))
 
