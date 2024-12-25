@@ -24,7 +24,7 @@ def iZs(Zs):
     try:
         return ZSS.index(Zs)
     except ValueError:
-        raise ValueError(f"Zs ({Zs}) não encontrado em ZSS.")
+        raise ValueError(f"Zs ({Zs}) not found in ZSS.")
 
 # ----------------------------------------------------------------------------------------------------
 def gmm_filename_suffix(gmm):
