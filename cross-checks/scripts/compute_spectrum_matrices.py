@@ -37,11 +37,16 @@ def gmm_filename_suffix(gmm):
 # ----------------------------------------------------------------------------------------------------
 def save_spectrum_file(matrix, gmm, Zs, horizon, location):
 
-    filename = f"{RESULTS_DIR}/{location}_spectrum_matrix_{horizon}.dat" \
-               if horizon == 'UF24' else \
-               f"{RESULTS_DIR}/{location}_spectrum_matrix_{PARTICLES[iZs(Zs)]}_{gmm_filename_suffix(gmm)}.dat"
-
-    header = f"gmm = {gmm} | Rcut = {'∞' if horizon == 'HMR06' else '10^18.6 V'} | Zs = {Zs}"
+    if horizon == 'HMR06':
+        filename = f"{RESULTS_DIR}/{location}_spectrum_matrix_{PARTICLES[iZs(Zs)]}_{gmm_filename_suffix(gmm)}.dat"
+    elif horizon == 'GFB23':
+        filename = f"{RESULTS_DIR}/{location}_spectrum_matrix_{PARTICLES[iZs(Zs)]}_3ZeV.dat"
+    elif horizon == 'UF24':
+        filename = f"{RESULTS_DIR}/{location}_spectrum_matrix_{horizon}.dat"
+    else:
+        raise ValueError(f"Unknown horizon: {horizon}")
+    
+    header = f"gmm = {gmm} | Rcut = {'∞' if horizon == 'HMR06' else f'3.e21 / {Zs} V' if horizon == 'GRB23' else '10^18.6 V'} | Zs = {Zs}"
     
     np.savetxt(filename, matrix, fmt = '%e', header = header, delimiter = '\t')
 
@@ -72,8 +77,14 @@ if __name__ == '__main__':
     #             compute_matrix(gmm, np.inf, Zs, 'HMR06', 'earth')
     #             compute_matrix(gmm, np.inf, Zs, 'HMR06', 'source')
 
+    # GFB23
+    for Zs in ZSS:
+            if Zs not in [2, 14]:
+                compute_matrix(2.5, 3.e21/Zs, Zs, 'GFB23', 'earth')
+                compute_matrix(2.5, 3.e21/Zs, Zs, 'GFB23', 'source')
+
     # UF24
-    compute_matrix(1.0, 10**18.6, 26, 'UF24', 'earth')
-    compute_matrix(1.0, 10**18.6, 26, 'UF24', 'source')
+    # compute_matrix(1.0, 10**18.6, 26, 'UF24', 'earth')
+    # compute_matrix(1.0, 10**18.6, 26, 'UF24', 'source')
 
 # ----------------------------------------------------------------------------------------------------
