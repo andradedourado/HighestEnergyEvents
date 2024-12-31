@@ -1,36 +1,29 @@
 import numpy as np
 
-cts = np.logspace(0, 3.5, num = 71)
-Es = np.logspace(0, 4, num = 81)
-Es = np.delete(Es, 0)
-
-particles = ['1H', '4He', '14N', '28Si', '56Fe']
-Zss = [1, 2, 7, 14, 26]
-
-dir = '/Users/andradedourado/Simulations/Runs/Analysis'
+BASE_DIR = '/Users/andradedourado/Simulations/Runs/Analysis'
+RESULTS_DIR = '../results'
+PARTICLES = ['1H', '4He', '14N', '28Si', '56Fe']
+ZSS = [1, 2, 7, 14, 26]
+CTS = np.logspace(0, 3.5, num = 71)
+ES = np.delete(np.logspace(0, 4, num = 81), 0)
 
 # ----------------------------------------------------------------------------------------------------
 def w_sim(Es, cts): 
 
-	Es = Es * 1.e18
-	w = Es * cts
-
-	return w
+    return Es * 1.e18 * cts
 
 # ----------------------------------------------------------------------------------------------------
-def w_spec(Es, Zs, gmm, Rmax):
-        
-	Es = Es*1.e18
-	w = Es**(-gmm) * np.exp(-Es/(Zs*Rmax))
-	
-	return w
+def w_spec(Es, Zs, gmm, Rcut):
+
+    return (Es * 1.e18) ** -gmm * np.exp(-(Es * 1.e18) / (Zs * Rcut))
 
 # ----------------------------------------------------------------------------------------------------
 def iZs(Zs):
 
-    for iZs in range(len(Zss)):
-        if Zs == Zss[iZs]:
-            return iZs
+    try:
+        return ZSS.index(Zs)
+    except ValueError:
+        raise ValueError(f"Zs ({Zs}) not found in ZSS.")
             
 # ----------------------------------------------------------------------------------------------------
 def EGMF(is_EGMF):
@@ -43,22 +36,22 @@ def EGMF(is_EGMF):
 # ----------------------------------------------------------------------------------------------------
 def compute_intensity_matrix(gmm, Rmax, Zs, is_EGMF):
 
-    matrix = np.zeros((len(cts), 79))
+    matrix = np.zeros((len(CTS), 79))
 
     if is_EGMF == False:
 
-        for icts in range(len(cts)):
+        for icts in range(len(CTS)):
 
-            for iEs in range(len(Es)):
+            for iEs in range(len(ES)):
 
-                data = np.loadtxt(dir + '/{0}/S_ID{1:02d}D{2:02d}E0{3:02d}.dat'.format(particles[iZs(Zs)], iZs(Zs), icts, iEs))
+                data = np.loadtxt(dir + '/{0}/S_ID{1:02d}D{2:02d}E0{3:02d}.dat'.format(PARTICLES[iZs(Zs)], iZs(Zs), icts, iEs))
                 
                 for idata in range(len(data)):
-                    matrix[icts, idata] += data[idata] * w_spec(Es[iEs], Zs, gmm, Rmax) * w_sim(Es[iEs], cts[icts])
+                    matrix[icts, idata] += data[idata] * w_spec(ES[iEs], Zs, gmm, Rmax) * w_sim(ES[iEs], CTS[icts])
 
     # elif is_EGMF == True:
 
-    np.savetxt('../results/intensity_matrix_{0}_{1}.dat'.format(particles[iZs(Zs)], EGMF(is_EGMF)), matrix, fmt = '%e', header = 'gmm = {0} | Rmax = 10^{{{1}}} V | Zs = {2}'.format(gmm, np.log10(Rmax), Zs), delimiter = '\t')
+    np.savetxt(f"{RESULTS_DIR}/intensity_matrix_{PARTICLES[iZs(Zs)]}_{EGMF(is_EGMF)}.dat", matrix, fmt = '%e', header = 'gmm = {0} | Rmax = 10^{{{1}}} V | Zs = {2}'.format(gmm, np.log10(Rmax), Zs), delimiter = '\t')
 
 # ----------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -68,7 +61,7 @@ if __name__ == '__main__':
 
     is_EGMF = False
 
-    for Zs in Zss:
+    for Zs in ZSS:
         compute_intensity_matrix(gmm, Rmax, Zs, is_EGMF)
 
 # ----------------------------------------------------------------------------------------------------
