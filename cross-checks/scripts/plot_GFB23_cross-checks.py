@@ -1,5 +1,4 @@
 from matplotlib.offsetbox import AnchoredText
-from matplotlib.pylab import cm
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -65,7 +64,7 @@ if __name__ == '__main__':
 
     # plot_GFB23_original(150.)
     # plot_GFB23_original(300.)
-    
+
     for Eobs in EOBS:
         for Zs in ZSS:
             plot_GFB23_comparison(Zs, Eobs)
