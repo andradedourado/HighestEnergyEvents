@@ -2,7 +2,7 @@ import numpy as np
 
 RESULTS_DIR = '../results'
 PARTICLES = ['1H', '14N', '56Fe']
-ZSS = [1, 14, 56]
+ZSS = [1, 7, 26]
 EOBS = [150., 300.]
 CTS = np.logspace(0, 3.5, num = 71)
 ES = np.delete(np.logspace(0, 4, num = 81), 0)
