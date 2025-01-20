@@ -4,6 +4,7 @@ BASE_DIR = '/Users/andradedourado/Simulations/Runs/Analysis'
 RESULTS_DIR = '../results'
 PARTICLES = ['1H', '4He', '14N', '28Si', '56Fe']
 ZSS = [1, 2, 7, 14, 26]
+GMMS = [-2., -1., 0., 1., 2.]
 CTS = np.logspace(0, 3.5, num = 71)
 ES = np.delete(np.logspace(0, 4, num = 81), 0)
 
@@ -26,6 +27,16 @@ def iZs(Zs):
         raise ValueError(f"Zs ({Zs}) not found in ZSS.")
             
 # ----------------------------------------------------------------------------------------------------
+def format_Rcut_label(Rcut):
+
+    if Rcut == 10**18.6:
+        return '18p6'
+    elif Rcut == np.inf:
+        return 'inf'
+    else:
+        return str(Rcut)
+    
+# ----------------------------------------------------------------------------------------------------
 def EGMF(is_EGMF):
 
     if is_EGMF == False:
@@ -34,12 +45,12 @@ def EGMF(is_EGMF):
         return 'EGMF'
 
 # ----------------------------------------------------------------------------------------------------
-def save_spectrum_file(matrix, Zs, location, is_EGMF):
+def save_spectrum_file(matrix, gmm, Rcut, Zs, location, is_EGMF):
 
     if location == 'source':
-        filename = f"{RESULTS_DIR}/{location}_spectrum_matrix_{PARTICLES[iZs(Zs)]}.dat"
+        filename = f"{RESULTS_DIR}/{location}_spectrum_matrix_{str(gmm).replace('.', 'p')}_{format_Rcut_label(Rcut)}_{PARTICLES[iZs(Zs)]}.dat"
     elif location == 'earth':
-        filename = f"{RESULTS_DIR}/{location}_spectrum_matrix_{PARTICLES[iZs(Zs)]}_{EGMF(is_EGMF)}.dat"
+        filename = f"{RESULTS_DIR}/{location}_spectrum_matrix_{str(gmm).replace('.', 'p')}_{format_Rcut_label(Rcut)}_{PARTICLES[iZs(Zs)]}_{EGMF(is_EGMF)}.dat"
 
     np.savetxt(filename, matrix, fmt = '%e', delimiter = '\t')
 
@@ -60,13 +71,19 @@ def compute_matrix(gmm, Rcut, Zs, location, is_EGMF, num_particles = 1000):
             elif location == 'source':
                 matrix[icts, iEs] += num_particles * weight
 
-    save_spectrum_file(matrix, Zs, location, is_EGMF)
+    save_spectrum_file(matrix, gmm, Rcut, Zs, location, is_EGMF)
 
 # ----------------------------------------------------------------------------------------------------  
 if __name__ == '__main__':
 
-    for Zs in ZSS:
-        compute_matrix(1., 10**18.6, Zs, 'earth', False)
-        compute_matrix(1., 10**18.6, Zs, 'source', False)
+    # for Zs in ZSS:
+    #     compute_matrix(1., 10**18.6, Zs, 'earth', False)
+    #     compute_matrix(1., 10**18.6, Zs, 'source', False)
+
+    for gmm in GMMS:
+        compute_matrix(gmm, 10**18.6, 26, 'earth', False)
+        compute_matrix(gmm, 10**18.6, 26, 'source', False)
+        compute_matrix(gmm, np.inf, 26, 'earth', False)
+        compute_matrix(gmm, np.inf, 26, 'source', False)
 
 # ----------------------------------------------------------------------------------------------------

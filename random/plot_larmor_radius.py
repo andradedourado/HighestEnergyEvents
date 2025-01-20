@@ -38,7 +38,7 @@ def plot_larmor_radius():
     plt.xlabel(r'Energy$\: \rm [eV]$')
     plt.ylabel(r'Larmor radius$\: \rm [Mpc]$')
     plt.legend(title = r'$Z$')
-    plt.grid(linestyle = ':', color = 'gray', linewidth = 0.25, zorder = -1.0)
+    plt.grid(linestyle = '-', color = 'gray', linewidth = 0.25, zorder = -1.0)
     plt.savefig(f"larmor_radius.pdf", bbox_inches = 'tight')
     plt.savefig(f"larmor_radius.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
