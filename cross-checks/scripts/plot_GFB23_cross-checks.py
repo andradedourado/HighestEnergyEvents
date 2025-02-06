@@ -60,6 +60,26 @@ def plot_GFB23_comparison(Zs, Eobs):
     plt.show()
 
 # ----------------------------------------------------------------------------------------------------
+def plot_FR_GFB23_comparison(Zs, Eobs):
+    
+    data_GFB23 = np.loadtxt(f"../data/GFB23_original_{PARTICLES[iZs(Zs)]}_{int(Eobs)}EeV.dat") 
+    data_FR = np.loadtxt(f"../data/FR_original_{PARTICLES[iZs(Zs)]}_{int(Eobs)}EeV.dat")
+    plt.plot(data_GFB23[:,0], data_GFB23[:,1], label = 'GFB23', color = 'k')
+    plt.plot(data_FR[:,0], data_FR[:,1], label = 'FR', color = 'r')
+    
+    at = AnchoredText(r'GRB23 | {0} | {1}$\: \rm EeV$'.format(PARTICLES_LEGEND[iZs(Zs)], int(Eobs)), loc = 'upper center', frameon = False, prop = {'fontsize': 'large'})
+    plt.gca().add_artist(at)
+
+    plt.xscale('log')
+    plt.xlim([1.e0, 1.e2])
+    plt.xlabel(r'Propagation distance$\: \rm [Mpc]$')
+    plt.ylabel(r'$a_{\rm GZK}$')
+    plt.legend(title = 'Results')
+    plt.savefig(f"../figures/FR_GFB23_comparison_{PARTICLES[iZs(Zs)]}_{int(Eobs)}EeV.pdf", bbox_inches = 'tight')
+    plt.savefig(f"../figures/FR_GFB23_comparison_{PARTICLES[iZs(Zs)]}_{int(Eobs)}EeV.png", bbox_inches = 'tight', dpi = 300)
+    plt.show()
+
+# ----------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
     # plot_GFB23_original(150.)
@@ -68,5 +88,8 @@ if __name__ == '__main__':
     for Eobs in EOBS:
         for Zs in ZSS:
             plot_GFB23_comparison(Zs, Eobs)
+    
+    # for Eobs in EOBS:
+    #     plot_FR_GFB23_comparison(26, Eobs)
 
 # ----------------------------------------------------------------------------------------------------

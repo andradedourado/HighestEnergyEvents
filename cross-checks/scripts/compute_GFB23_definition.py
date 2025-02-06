@@ -55,8 +55,8 @@ def compute_GFB23_definiton_aGZK(Zs, Eobs):
 # ----------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    for Zs in ZSS:
-        compute_GFB23_definition_matrix(Zs)
+    # for Zs in ZSS:
+    #     compute_GFB23_definition_matrix(Zs)
     
     for Zs in ZSS:
         for Eobs in EOBS:

@@ -52,6 +52,9 @@ def plot_UF24_definition_cut_Zs(gmm, Rcut, is_EGMF):
         data = np.loadtxt(f"{RESULTS_DIR}/UF24_definition_cut_{str(gmm).replace('.', 'p')}_{format_Rcut_label(Rcut)}_{PARTICLES[iZs(Zs)]}_{EGMF(is_EGMF)}.dat")  
         plt.plot(data[:,0], data[:,1], label = f'{LEGENDS[iZs(Zs)]}')
 
+    at = AnchoredText(r'UF24 | $\Gamma = {0}$ | $R_{{\rm cut}} = 10^{{{1}}} \: \rm V$'.format(gmm, np.log10(Rcut)), loc = 'upper center', frameon = False, prop = {'fontsize': 'large'})
+    plt.gca().add_artist(at)
+
     plt.yscale('log')
     plt.xlim([100, 300])
     plt.ylim(top = 200)
@@ -69,12 +72,18 @@ def plot_UF24_definition_cut_gmm(Rcut, Zs, is_EGMF):
         data = np.loadtxt(f"{RESULTS_DIR}/UF24_definition_cut_{str(gmm).replace('.', 'p')}_{format_Rcut_label(Rcut)}_{PARTICLES[iZs(Zs)]}_{EGMF(is_EGMF)}.dat")  
         plt.plot(data[:,0], data[:,1], label = f'{gmm}')
 
+    if Rcut == np.inf:
+        at = AnchoredText(r'UF24 | {0} | $R_{{\rm cut}} = \infty$'.format(LEGENDS[iZs(Zs)]), loc = 'upper center', frameon = False, prop = {'fontsize': 'large'})
+    else:
+        at = AnchoredText(r'UF24 | {0} | $R_{{\rm cut}} = 10^{{{1}}} \: \rm V$'.format(LEGENDS[iZs(Zs)], np.log10(Rcut)), loc = 'upper center', frameon = False, prop = {'fontsize': 'large'})
+    plt.gca().add_artist(at)
+
     plt.yscale('log')
     plt.xlim([100, 300])
     plt.ylim(top = 200)
     plt.xlabel(r'Energy$\: \rm [EeV]$')
     plt.ylabel(r'Source distance$\: \rm [Mpc]$')
-    plt.legend(title = 'Spectral index')
+    plt.legend(title = 'Spectral index', loc = 'lower left')
     plt.savefig(f"../figures/UF24_definition_cut_gmm_{format_Rcut_label(Rcut)}_{PARTICLES[iZs(Zs)]}_{EGMF(is_EGMF)}.pdf", bbox_inches = 'tight')
     plt.savefig(f"../figures/UF24_definition_cut_gmm_{format_Rcut_label(Rcut)}_{PARTICLES[iZs(Zs)]}_{EGMF(is_EGMF)}.png", bbox_inches = 'tight', dpi = 300)
     plt.show()
