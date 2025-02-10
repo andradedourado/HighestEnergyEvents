@@ -10,6 +10,7 @@ plt.rcParams.update({'legend.fontsize': 'medium',
 'xtick.labelsize': 'large',
 'ytick.labelsize': 'large'})
 
+data = np.genfromtxt('highest_energy_events.dat', dtype = None)
 degree = np.pi / 180.
 
 # ----------------------------------------------------------------------------------------------------
@@ -42,57 +43,44 @@ def countours_auger_sky():
     return countours
 
 # ----------------------------------------------------------------------------------------------------
-def galactic_l(idata):
-		
-		data = np.genfromtxt('highest_energy_events.dat', dtype = None)
-
-		c_equatorial = SkyCoord(ra = data[idata][6] * u.degree, dec = data[idata][5] * u.degree, frame = 'icrs', unit = 'deg')
-		c_galactic = c_equatorial.galactic
+def ra_dec_to_gal_lat(idata):
+     
+    c_equatorial = SkyCoord(ra = data[idata][4] * u.degree, dec = data[idata][5] * u.degree, frame = 'icrs', unit = 'deg')
+    c_galactic = c_equatorial.galactic
 			
-		l = c_galactic.l.radian			
-			
-		if 2*np.pi >= l >= np.pi:
-				
-			l = 2*np.pi - l
-    		
-		elif 0 <= l <= np.pi:
-			
-			l = -l
-
-		return l 	
+    return c_galactic.b.radian
 
 # ----------------------------------------------------------------------------------------------------
-def galactic_b(idata):
-		
-		data = np.genfromtxt('highest_energy_events.dat', dtype = None)
+def ra_dec_to_gal_lon(idata):
 
-		c_equatorial = SkyCoord(ra = data[idata][6] * u.degree, dec = data[idata][5] * u.degree, frame = 'icrs', unit = 'deg')
-		c_galactic = c_equatorial.galactic
+    c_equatorial = SkyCoord(ra = data[idata][4] * u.degree, dec = data[idata][5] * u.degree, frame = 'icrs', unit = 'deg')
+    c_galactic = c_equatorial.galactic
 			
-		b = c_galactic.b.radian
-
-		return b
+    l = c_galactic.l.radian			
+			
+    if 2*np.pi >= l >= np.pi:			
+        return 2*np.pi - l
+    elif 0 <= l <= np.pi:
+	    return -l
 
 # ----------------------------------------------------------------------------------------------------
 def map_arrival_directions():
 	
-	data = np.genfromtxt('highest_energy_events.dat', dtype = None)
-
 	plt.figure()
 	axs = plt.subplot(111, projection = 'mollweide')
 	axs.set_longitude_grid_ends(90)
 	
-	l = np.zeros(len(data))
-	b = np.zeros(len(data))
+	gal_lon = np.zeros(len(data))
+	gal_lat = np.zeros(len(data))
 	E = np.zeros(len(data))
 
 	for idata in range(len(data)):
-		l[idata] = galactic_l(idata)
-		b[idata] = galactic_b(idata)
+		gal_lon[idata] = ra_dec_to_gal_lon(idata)
+		gal_lat[idata] = ra_dec_to_gal_lat(idata)
 		E[idata] = data[idata][1]
 		
 	plt.fill(countours_auger_sky()[:,1], countours_auger_sky()[:,0], facecolor = 'lightgray', edgecolor = None)
-	plt.scatter(l, b, marker = 'D', c = E, cmap = 'viridis', s = 24)
+	plt.scatter(gal_lon, gal_lat, marker = 'D', c = E, cmap = 'viridis', s = 24)
 	plt.colorbar(label = r'Energy of the event$\:$[EeV]', location = 'bottom')
 
 	plt.xlabel(r'Galactic longitude, $l \: {\rm [deg]}$', labelpad = 10)
@@ -110,27 +98,25 @@ def map_arrival_directions():
 # ----------------------------------------------------------------------------------------------------
 def map_arrival_directions_top4():
 	
-	data = np.genfromtxt('highest_energy_events.dat', dtype = None)
-
 	plt.figure()
 	axs = plt.subplot(111, projection = 'mollweide')
 	axs.set_longitude_grid_ends(90)
 	
-	l = np.zeros(len(data))
-	b = np.zeros(len(data))
+	gal_lon = np.zeros(len(data))
+	gal_lat = np.zeros(len(data))
 	E = np.zeros(len(data))
 
 	for idata in range(len(data)):
-		l[idata] = galactic_l(idata)
-		b[idata] = galactic_b(idata)
+		gal_lon[idata] = ra_dec_to_gal_lon(idata)
+		gal_lat[idata] = ra_dec_to_gal_lat(idata)
 		E[idata] = data[idata][1]
 
-	l = l[[1, 2, 3, 4]]
-	b = b[[1, 2, 3, 4]]
+	gal_lon = gal_lon[[1, 2, 3, 4]]
+	gal_lat = gal_lat[[1, 2, 3, 4]]
 	E = E[[1, 2, 3, 4]]
 
 	plt.fill(countours_auger_sky()[:,1], countours_auger_sky()[:,0], facecolor = 'lightgray', edgecolor = None)
-	plt.scatter(l, b, marker = 'D', c = E, cmap = 'viridis', s = 24, vmin = 46, vmax = 166)
+	plt.scatter(gal_lon, gal_lat, marker = 'D', c = E, cmap = 'viridis', s = 24, vmin = 46, vmax = 166)
 	plt.colorbar(label = r'Energy of the event$\:$[EeV]', location = 'bottom')
 
 	plt.xlabel(r'Galactic longitude, $l \: {\rm [deg]}$', labelpad = 10)
