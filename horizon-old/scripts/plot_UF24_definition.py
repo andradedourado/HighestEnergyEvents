@@ -17,8 +17,6 @@ LEGENDS = [r'$^1\mathrm{H}$', r'$^4\mathrm{He}$', r'$^{14}\mathrm{N}$', r'$^{28}
 ZSS = [1, 2, 7, 14, 26]
 GMMS = [-1., 0., 1., 2.]
 
-# Por que as curvas estao coincidindo do -2 e -1 para o caso sem corte exponencial?
-
 # ----------------------------------------------------------------------------------------------------
 def iZs(Zs):
 
